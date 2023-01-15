@@ -5,6 +5,17 @@
 // 4. determine current player
 // 5. check win conditions, if not met, set other player active
 
+const winningConditions = [
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8],
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 5, 8],
+  [0, 4, 8],
+  [2, 4, 6],
+];
+
 const form = document.querySelector('#myForm')
 
 form.addEventListener('submit',(event)=>{
@@ -59,5 +70,13 @@ const playMove = (box, data) => {
   //increase the round
   data.round++;
   if(data.round%2===0){data.currentPlayer='X'}else{data.currentPlayer='O'}
-  
+
+  //check end conditions
+  if(endConditions(data)){
+    //reflect endConditions to Dom
+  }
 };
+
+const endConditions = (data)=>{
+
+}
