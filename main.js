@@ -74,9 +74,26 @@ const playMove = (box, data) => {
   //check end conditions
   if(endConditions(data)){
     //reflect endConditions to Dom
+   const  displayState = document.querySelector('.displayTurn')
+   displayState.textContent = 'Winner'
   }
 };
 
 const endConditions = (data)=>{
-
+// 3 game states
+// winner, tie, game not finished
+  if(checkWinner(data)) return true //show winner 
+  else if (data.round === 9 ) return true  //show tie
+  return false
 }
+
+const checkWinner = (data) => {
+  let result = false;
+winningConditions.forEach(cell =>{
+  if(data.board[cell[0]]===data.board[cell[1]] && data.board[cell[0]] ===data.board[cell[2]]){
+    result = true
+    data.gameOver = true
+  }
+})
+  return result;
+};
