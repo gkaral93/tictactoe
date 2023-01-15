@@ -16,7 +16,7 @@ const winningConditions = [
   [2, 4, 6],
 ];
 
-const form = document.querySelector('#myForm')
+const form = document.querySelector('#myForm') 
 
 form.addEventListener('submit',(event)=>{
     //prevent refresh
@@ -72,30 +72,35 @@ const playMove = (box, data) => {
   
   //check end conditions
   if(endConditions(data)){
-    //reflect endConditions to Dom
     return;
   }
   
   // change current player
-   changePlayer(data);
- 
+  if (data.choice ===0){  // human vs human
+    changePlayer(data)
+
+  }else if (data.choice ===1){
+   //easy ai and change back to player1
+  easyAiMove(data);
+  data.currentPlayer = 'X';  // change player mark to 'X' after move
+  }
 };
 
 const endConditions = (data) => {
   // 3 game states
   // winner, tie, game not finished
 
-  if (checkWinner(data)) {
+  if (checkWinner(data)) {  //show winner
     adjustDom("displayTurn", (data.currentPlayer === "X" ? data.player1Name : data.player2Name) + " has won the game!"
     );
     return true;
-  } //show winner
+  }
   else if (data.round === 9) {
     adjustDom("displayTurn", `It's a tie!`); //show tie
     data.gameOver = true;
     return true;
   }
-  return false;
+  return false; // continue game
 };
 
 const checkWinner = (data) => {
@@ -121,3 +126,23 @@ data.currentPlayer = data.currentPlayer==='X'? 'O' : 'X'
 let displayTurnText = data.currentPlayer === 'X'?data.player1Name : data.player2Name
 adjustDom('displayTurn',`${displayTurnText}'s turn`)
 }
+
+
+const easyAiMove = (data) => {
+  changePlayer(data); //Change player to O mark so AI plays
+  setTimeout(() => {
+    let availableSpaces = data.board.filter(
+      (space) => space !== "X" && space !== "O"
+    );
+    let move = availableSpaces[Math.floor(Math.random() * availableSpaces.length)];
+    data.board[move] = data.player2; //add 'O'
+    let box = document.getElementById(`${move}`);
+    box.textContent = data.player2;
+    box.classList.add("player2"); //styling
+      }, 200);
+
+  if (endConditions(data)) {
+    return;
+  }
+  changePlayer(data);
+};
